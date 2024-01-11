@@ -1,6 +1,6 @@
-const Game = require("../models/game");
-const Developer = require("../models/developer");
-const Genre = require("../models/genre");
+const Game = require("../models/Game");
+const Developer = require("../models/Developer");
+const Genre = require("../models/Genre");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");

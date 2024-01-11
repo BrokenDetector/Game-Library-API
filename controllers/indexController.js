@@ -1,6 +1,6 @@
-const Game = require("../models/game");
-const Developer = require("../models/developer");
-const Genre = require("../models/genre");
+const Game = require("../models/Game");
+const Developer = require("../models/Developer");
+const Genre = require("../models/Genre");
 const asyncHandler = require("express-async-handler");
 
 exports.all_list = asyncHandler(async (req, res, next) => {

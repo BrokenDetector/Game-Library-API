@@ -1,5 +1,5 @@
-const Developer = require("../models/developer");
-const Game = require("../models/game");
+const Developer = require("../models/Developer");
+const Game = require("../models/Game");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
