@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const sharp = require("sharp");
+const fs = require("fs");
 
 const multerStorage = multer.memoryStorage();
 const multerFilter = (req, file, cb) => {
@@ -275,7 +276,22 @@ exports.game_delete_post = asyncHandler(async (req, res, next) => {
     // Delete game
     try {
         const game = await Game.findOne({ title: { $regex: new RegExp(`^${req.params.name}$`, "i") } }).exec();
+
+        if (game === null) {
+            return res.status(404).json({ message: "Game not found" });
+        }
+
+        const imageFilename = game.imageUrl;
+
         await Game.findByIdAndDelete(game._id);
+
+        if (imageFilename !== "blank_image.png") {
+            const imagePath = `./public/images/${imageFilename}`;
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
+
         res.json("Deleted");
     } catch (err) {
         res.status(404).json({ message: err.message });
