@@ -2,6 +2,7 @@ const Game = require("../models/Game");
 const Developer = require("../models/Developer");
 const Genre = require("../models/Genre");
 const asyncHandler = require("express-async-handler");
+const { sendMessageToTelegram } = require("../telegram");
 
 exports.all_list = asyncHandler(async (req, res, next) => {
     // Get list of all
@@ -48,6 +49,27 @@ exports.search_all = asyncHandler(async (req, res, next) => {
         }
 
         return res.json({ searchResults, title: "Search Results" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+exports.report = asyncHandler(async (req, res, next) => {
+    try {
+        const { message, page } = req.body;
+
+        if (!page) {
+            return res.status(400).json({ error: "Invalid report data" });
+        }
+
+        const reportData = {
+            message,
+            page,
+            ipAddress: req.ip,
+        };
+
+        sendMessageToTelegram(reportData);
+        res.json("Sent");
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

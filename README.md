@@ -19,6 +19,10 @@ This is the backend API for the Game Library application. It provides a RESTful 
 
 - Search for games, developers, and genres based on a search term: `GET /search/:search`
 
+### Report
+
+- Report for games, developers and genres: `POST /report`
+
 ### Images
 
 - Retrieve the image associated with a game: `GET /image/:title`

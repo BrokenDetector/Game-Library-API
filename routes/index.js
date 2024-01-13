@@ -8,7 +8,11 @@ const indexController = require("../controllers/indexController");
 // Get All Items
 router.get("/home", indexController.all_list);
 
+// Search
 router.get("/search/:search", indexController.search_all);
+
+// Report
+router.post("/report", indexController.report);
 
 // Get Image
 router.get("/image/:title", function (req, res, next) {
