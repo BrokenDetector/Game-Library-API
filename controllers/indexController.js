@@ -2,14 +2,34 @@ const Game = require("../models/Game");
 const Developer = require("../models/Developer");
 const Genre = require("../models/Genre");
 const asyncHandler = require("express-async-handler");
-const { sendMessageToTelegram } = require("../telegram");
+const { sendMessageToTelegram } = require("../utils/telegram");
+const multer = require("multer");
+
+const multerStorage = multer.memoryStorage();
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith("image")) {
+        cb(null, true);
+    } else {
+        cb("Please upload only images.", false);
+    }
+};
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter,
+});
+
+exports.get_image = (req, res, next) => {
+    const image = req.url.substr(7);
+    res.sendFile(`${image}`, { root: "./public/images" });
+};
 
 exports.all_list = asyncHandler(async (req, res, next) => {
     // Get list of all
     try {
-        const allGames = await Game.find().populate("genre").exec();
-        const allGenres = await Genre.find().populate("name").exec();
-        const allDevelopers = await Developer.find().populate("name").exec();
+        const allGames = await Game.find().exec();
+        const allGenres = await Genre.find().exec();
+        const allDevelopers = await Developer.find().exec();
 
         return res.json({ allGames, allDevelopers, allGenres, title: "GameLibrary" });
     } catch (err) {
@@ -25,6 +45,7 @@ exports.search_all = asyncHandler(async (req, res, next) => {
         const [games, developers, genres] = await Promise.all([
             Game.find({ title: { $regex: regex } })
                 .populate("genre")
+                .populate("developer")
                 .exec(),
             Developer.find({ name: { $regex: regex } }).exec(),
             Genre.find({ name: { $regex: regex } }).exec(),
@@ -54,7 +75,7 @@ exports.search_all = asyncHandler(async (req, res, next) => {
     }
 });
 
-exports.report = asyncHandler(async (req, res, next) => {
+exports.report = asyncHandler((req, res, next) => {
     try {
         const { message, page } = req.body;
 
@@ -74,3 +95,39 @@ exports.report = asyncHandler(async (req, res, next) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+exports.check_code = (req, res, next) => {
+    try {
+        // if headers Content-Type": "application/json"
+        if (req.body.code) {
+            if (req.body.code === "2024") {
+                if (req.path === "/check-code") {
+                    return res.status(200).json({ message: "Success" });
+                } else {
+                    next();
+                }
+            } else {
+                res.status(403).json({ message: "Wrong Code" });
+            }
+        } else {
+            upload.any()(req, res, (err) => {
+                if (err) {
+                    console.error("Multer Error: ", err);
+                    return res.status(500).json({ message: "Error processing form data" });
+                }
+
+                if (req.body.code === "2024") {
+                    if (req.path === "/check-code") {
+                        return res.status(200).json({ message: "Success" });
+                    } else {
+                        next();
+                    }
+                } else {
+                    res.status(403).json({ message: "Wrong Code" });
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 exports.developer_list = asyncHandler(async (req, res, next) => {
     // Get list of all categories
     try {
-        const allDevelopers = await Developer.find().populate("name").exec();
+        const allDevelopers = await Developer.find().exec();
 
         if (!allDevelopers) return res.status(404).json({ message: "No developers found" });
 

@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 exports.genre_list = asyncHandler(async (req, res, next) => {
     // Get list of all genres
     try {
-        const allGenres = await Genre.find().populate("name").exec();
+        const allGenres = await Genre.find().exec();
 
         if (!allGenres) return res.status(404).json({ message: "No genres found" });
 
