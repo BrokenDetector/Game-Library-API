@@ -4,12 +4,11 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 async function sendMessageToTelegram(reportData) {
-    const { message, page, ipAddress } = reportData;
+    const { message, page } = reportData;
 
     const text = `❗ New Report:\n
     💬 Message: ${message}\n
-    📄 Page: ${page}\n
-    💻 IP Address: ${ipAddress || "N/A"}`;
+    📄 Page: ${page}\n`
 
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const params = new URLSearchParams({

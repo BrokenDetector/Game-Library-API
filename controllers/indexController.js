@@ -4,6 +4,7 @@ const Genre = require("../models/Genre");
 const asyncHandler = require("express-async-handler");
 const { sendMessageToTelegram } = require("../utils/telegram");
 const multer = require("multer");
+const fs = require("fs");
 
 const multerStorage = multer.memoryStorage();
 const multerFilter = (req, file, cb) => {
@@ -19,10 +20,15 @@ const upload = multer({
     fileFilter: multerFilter,
 });
 
-exports.get_image = (req, res, next) => {
+exports.get_image = asyncHandler(async (req, res, next) => {
     const image = req.url.substr(7);
-    res.sendFile(`${image}`, { root: "./public/images" });
-};
+    try {
+        await fs.promises.access(`./public/images/${image}`);
+        res.sendFile(`${image}`, { root: "./public/images" });
+    } catch (err) {
+        res.status(404).json({ message: "Image Not Found" });
+    }
+});
 
 exports.all_list = asyncHandler(async (req, res, next) => {
     // Get list of all
@@ -86,7 +92,6 @@ exports.report = asyncHandler((req, res, next) => {
         const reportData = {
             message,
             page,
-            ipAddress: req.ip,
         };
 
         sendMessageToTelegram(reportData);

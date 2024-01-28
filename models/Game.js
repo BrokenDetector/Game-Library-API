@@ -7,12 +7,7 @@ const GameSchema = new Schema({
     developer: { type: Schema.Types.ObjectId, ref: "Developer", required: true },
     description: { type: String },
     genre: { type: Schema.Types.ObjectId, ref: "Genre", required: true },
-    price: { type: Number },
     imageUrl: { type: String },
-});
-
-GameSchema.virtual("url").get(function () {
-    return `/games/${this.name}`;
 });
 
 module.exports = mongoose.model("Game", GameSchema);

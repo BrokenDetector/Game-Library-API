@@ -1,5 +1,4 @@
 require("dotenv").config();
-const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -8,8 +7,12 @@ const cors = require("cors");
 const helmet = require("helmet");
 const indexRouter = require("./routes/index");
 const rateLimit = require("express-rate-limit");
-
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
 const app = express();
+
+const swaggerDocument = YAML.load("./utils/swagger.yaml");
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
@@ -37,34 +40,25 @@ app.use(
 );
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
 
-app.use(logger("dev"));
+app.use(logger("common"));
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", indexRouter);
 app.get("/", function (req, res, next) {
-    res.send("API");
+    res.send("Game Library API. Docs: /api/docs");
 });
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+    res.status(404).json({ error: "Page not found." });
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render("error");
+    console.error(err.stack);
+    res.status(500).json({ error: "Internal server error." });
 });
 
 module.exports = app;

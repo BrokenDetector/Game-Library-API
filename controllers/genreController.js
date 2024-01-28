@@ -122,6 +122,7 @@ exports.genre_update_post = [
         }
     }),
 ];
+
 exports.genre_delete_get = asyncHandler(async (req, res, next) => {
     // Delete genre
     try {

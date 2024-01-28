@@ -1,0 +1,983 @@
+openapi: "3.0.0"
+info:
+  title: "Game Library API"
+  version: "1.0"
+  description: "API documentation for the Game Library Application"
+tags:
+  - name: Game
+    description: Operations related to games.
+  - name: Developer
+    description: Operations related to developers.
+  - name: Genre
+    description: Operations related to genres.
+  - name: Utilities
+    description: Operations related to utility functions.
+components:
+    schemas:
+      Game:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: "658973a5b71bc5a385867697"
+          title:
+            type: string
+            example: Minecraft
+            description: The title of the game.
+          developer:
+            $ref: '#/components/schemas/Developer'
+          description:
+            type: string
+            example: super cool game
+            description: The description of the game.
+          genre:
+            $ref: '#/components/schemas/Game'
+          imageUrl:
+            type: string
+            example: blank_image.png
+            description: The URL of the game's image.
+      GameListResponse:
+        type: object
+        properties:
+          allGames:
+            type: array
+            items:
+              $ref: '#/components/schemas/Game'
+          title:
+            type: string
+            description: The title of the page
+      CreateGameResponse:
+        type: object
+        properties:
+          allDevelopers:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          allGenres:
+            type: array
+            items:
+              $ref: '#/components/schemas/Genre'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      GameDetailResponse:
+        type: object
+        properties:
+          game:
+            $ref: '#/components/schemas/Game'
+          title:
+            type: string
+            description: The title of the page
+      UpdateGameResponse:
+        type: object
+        properties:
+          game:
+            $ref: '#/components/schemas/Game'
+          allDevelopers:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          allGenres:
+            type: array
+            items:
+              $ref: '#/components/schemas/Genre'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      DeleteGameResponse:
+        type: object
+        properties:
+          game:
+            $ref: '#/components/schemas/Game'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      Developer:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: "658973a4b71bc5a38586767f"
+          name:
+            type: string
+            example: Mojang
+            description: The name of the developer
+      DeveloperListResponse:
+        type: object
+        properties:
+          allDevelopers:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          title:
+            type: string
+            description: The title of the page
+      CreateDeveloperResponse:
+        type: object
+        properties:
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      DeveloperDetailResponse:
+        type: object
+        properties:
+          developer:
+            $ref: '#/components/schemas/Developer'
+          allGamesFromDeveloper:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          title:
+            type: string
+            description: The title of the page
+      DeveloperUpdateResponse:
+        type: object
+        properties:
+          developer:
+            $ref: '#/components/schemas/Developer'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      DeleteDeveloperResponse:
+        type: object
+        properties:
+          developer:
+            $ref: '#/components/schemas/Developer'
+          allGamesFromDeveloper:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      Genre:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: "65899beb3fa32354360ca5e3"
+          name:
+            type: string
+            example: Sandbox
+            description: The name of the genre.
+      GenreListResponse:
+        type: object
+        properties:
+          allGenres:
+            type: array
+            items:
+              $ref: '#/components/schemas/Genre'
+          title:
+            type: string
+            description: The title of the page
+      GenreCreateResponse:
+        type: object
+        properties:
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      GenreDetailResponse:
+        type: object
+        properties:
+          genre:
+            $ref: '#/components/schemas/Genre'
+          gamesInGenre:
+            type: array
+            items:
+              $ref: '#/components/schemas/Game'
+          title:
+            type: string
+            description: The title of the page
+      GenreUpdateResponse:
+        type: object
+        properties:
+          developer:
+            $ref: '#/components/schemas/Developer'
+          title:
+            type: string
+            description: The title of the page
+          code:
+            type: string
+            example: 1234
+      DeleteGenreResponse:
+        type: object
+        properties:
+          genre:
+            $ref: '#/components/schemas/Genre'
+          gamesInGenre:
+            type: array
+            items:
+              $ref: '#/components/schemas/Game'
+          title:
+            type: string
+            description: The title of the page
+      AllListResponse:
+        type: object
+        properties:
+          allGames:
+            type: array
+            items:
+              $ref: '#/components/schemas/Game'
+          allDevelopers:
+            type: array
+            items:
+              $ref: '#/components/schemas/Developer'
+          allGenres:
+            type: array
+            items:
+              $ref: '#/components/schemas/Genre'
+          title:
+            type: string
+            description: The title of the page
+      SearchAllResponse:
+        type: object
+        properties:
+          searchResults:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/Game'
+                - $ref: '#/components/schemas/Developer'
+                - $ref: '#/components/schemas/Genre'
+          title:
+            type: string
+            description: The title of the page
+      ReportRequestBody:
+        type: object
+        properties:
+          message:
+            type: string
+          page:
+            type: string
+      SuccessResponse:
+        type: string
+      ErrorResponse:
+        type: object
+        properties:
+          message:
+            type: string
+paths:
+  /api/games:
+    get:
+      tags:
+        - Game
+      summary: Get list of all games.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameListResponse'
+  
+  /api/game/create:
+    get:
+      tags:
+        - Game
+      summary: Get data for creating a new game.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGameResponse'
+    post:
+      tags:
+        - Game
+      summary: Create a new game.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                dev:
+                  type: string
+                genre:
+                  type: string
+                description:
+                  type: string
+                imageFile:
+                  type: string
+                code:
+                  type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/game/{name}:
+    get:
+      tags:
+        - Game
+      summary: Get details of a specific game.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the game.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameDetailResponse'
+
+  /api/game/{name}/update:
+    get:
+      tags:
+        - Game
+      summary: Get data for updating a game.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the game.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateGameResponse'
+    post:
+      tags:
+        - Game
+      summary: Update a game.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the game.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the page
+                dev:
+                  type: string
+                genre:
+                  type: string
+                description:
+                  type: string
+                imageFile:
+                  type: string
+                  format: binary
+                code:
+                  type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/game/{name}/delete:
+    get:
+       tags:
+        - Game
+       summary: Get data for deleting a game.
+       parameters:
+         - in: path
+           name: name
+           required: true
+           description: The name of the game.
+           schema:
+             type: string
+       responses:
+         200:
+           description: Successful response.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/GameDetailResponse'
+    post:
+       tags:
+        - Game
+       summary: Delete a game.
+       parameters:
+         - in: path
+           name: name
+           required: true
+           description: The name of the game.
+           schema:
+             type: string
+       responses:
+         200:
+           description: Successful response.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/DeleteGameResponse'
+         404:
+           description: Game not found.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+
+  /api/developers:
+    get:
+      tags:
+        - Developer
+      summary: Get the list of all developers.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperListResponse'
+        404:
+          description: Not found. No developers found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/developer/create:
+    get:
+      tags:
+        - Developer
+      summary: Get the form for creating a new developer.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDeveloperResponse'
+    
+    post:
+      tags:
+        - Developer
+      summary: Create a new developer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              name:
+                type: string
+                example: Mojang
+              code:
+                type: string
+                example: 1234
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Developer'
+        400:
+          description: Bad request. Invalid developer name or name already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not found. Form for creating a new developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/developer/{name}:
+    get:
+      tags:
+        - Developer
+      summary: Get details of a developer.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: The name of the developer.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperDetailResponse'
+        404:
+          description: Developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  /api/developer/{name}/update:
+    get:
+      tags:
+        - Developer
+      summary: Get information about a developer for updating.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the developer to update.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  developer:
+                    $ref: '#/components/schemas/Developer'
+                  title:
+                    type: string
+                    description: The title of the page
+        404:
+          description: Developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+ 
+    post:
+      tags:
+        - Developer
+      summary: Update a developer.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the developer to update.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperUpdateResponse'
+        400:
+          description: Invalid developer name or validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/developer/{name}/delete:
+    get:
+      tags:
+        - Developer
+      summary: Get information about a developer and their games for deletion.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the developer.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  developer:
+                    $ref: '#/components/schemas/Developer'
+                  allGamesFromDeveloper:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Game'
+                  title:
+                    type: string
+                    description: The title of the page
+        404:
+          description: Developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+ 
+    post:
+      tags:
+        - Developer
+      summary: Delete a developer.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the developer to delete.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDeveloperResponse'
+        404:
+          description: Developer not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/genres:
+    get:
+      tags:
+        - Genre
+      summary: Get the list of all genres.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreListResponse'
+        404:
+          description: Not found. No genres found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/genre/create:
+    get:
+      tags:
+        - Genre
+      summary: Get the form for creating a new genre.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreCreateResponse'
+        404:
+          description: Not Found. Genre create form not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Genre
+      summary: Create a new genre.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              name:
+                type: string
+                example: Sandbox
+              code:
+                type: string
+                example: 1234
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreCreateResponse'
+        400:
+          description: Bad Request. Invalid genre name or genre already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found. Genre not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  /api/genre/{name}:
+    get:
+      tags:
+        - Genre
+      summary: Get details of a specific genre.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the genre.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreDetailResponse'
+        404:
+          description: Not Found. Genre not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Genre
+      summary: Update details of a specific genre.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the genre.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenreUpdateResponse'
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreUpdateResponse'
+        400:
+          description: Bad Request. Invalid genre name.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found. Genre not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/genre/{name}/delete:
+    get:
+      tags:
+        - Genre
+      summary: Get details for deleting a specific genre.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the genre.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreDetailResponse'
+        404:
+          description: Not Found. Genre not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Genre
+      summary: Delete a specific genre.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the genre.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGenreResponse'
+        404:
+          description: Not Found. Genre not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  /api/image/{image}:
+    get: 
+      tags:
+        - Utilities
+      summary: Get an image by filename.  
+      parameters:
+        - name: image
+          in: path
+          required: true
+          description: Filename of the image.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            image/:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Not Found. Image not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/home:
+    get:
+      tags:
+        - Utilities
+      summary: Get a list of all games, developers, and genres.
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllListResponse'
+        404:
+          description: Not Found. No items found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  /api/search/{search}:
+    get:
+      tags:
+        - Utilities
+      summary: Search for games, developers, and genres based on a keyword.
+      parameters:
+        - name: search
+          in: path
+          required: true
+          description: Keyword for search.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchAllResponse'
+        404:
+          description: Not Found. No matching items found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/report:
+    post:
+      tags:
+        - Utilities
+      summary: Report an issue.
+      requestBody:
+        description: Report data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequestBody'
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          description: Bad Request. Invalid report data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
